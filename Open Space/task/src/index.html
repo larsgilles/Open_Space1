@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Open Space</title>
+        <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+        }
+
+        .space {
+            background: url('img/space.png') no-repeat;
+            background-size: cover;
+            position: absolute;
+            margin: auto;
+            left: 25vw;
+            z-index: 1;
+            width: 100vh;
+            height: 100vh;
+        }
+
+        .planet-area {
+            position: absolute;
+            width: 100vh;
+            height: 100vh;
+            margin: auto;
+            z-index: 2;
+        }
+
+        .planet {
+            position: absolute;
+            width: 225px;
+            height: 225px;
+            bottom: 0;
+            margin: auto;
+            z-index: 3;
+        }
+
+        .rocket {
+            transform: rotate(45deg);
+            position: relative;
+            width: 45px;
+            height: 45px;
+            /*bottom: 75px;
+            left: 165px;*/
+            top: 700px;
+            left:100px;
+            z-index: 1000;
+        }
+
+        @keyframes rocketFly {
+            from {top:700px; left: 100px;}
+            to {top: -40px; left: 40vw}
+        }
+
+        .control-panel {
+            position: relative;
+            border: lightgrey solid 2px;
+            border-radius: 10px;
+            margin: 0;
+            padding: 0;
+            top: 50vh;
+            left: 20vw;
+            width: 400px;
+            height: 300px;
+            background: linear-gradient(grey, white);
+            z-index: 50;
+        }
+
+        .control-panel__inner {
+            margin: 0;
+            padding: 0;
+            width: 400px;
+            height: 300px;
+            display: flex;
+            flex-flow: row;
+            justify-content: center;
+            align-items: start;
+            flex-wrap: wrap;
+            z-index: 51;
+        }
+
+        .password {
+            position: relative;
+            top: 10px;
+            z-index: 52;
+        }
+
+        .password-textBox {
+            width: 250px;
+        }
+
+        .check-buttons {
+            position: absolute;
+            display: flex;
+            justify-content: space-evenly;
+            width: 400px;
+            top: 50px;
+        }
+
+        .levers {
+            position: absolute;
+            left:0;
+            top: 125px;
+            display: flex;
+            justify-content: space-evenly;
+            flex-flow: column; /*für den Test auf row umstellen*/
+            width: 160px;
+            height: 400px;
+            align-items: center;
+            transform-origin: 60px 60px;
+            transform: rotate(-90deg);
+        }
+
+        .lever {
+            width: 120px;
+            height: 20px;
+            margin: 0;
+        }
+
+        .launch{
+            position: absolute;
+            width: 75px;
+            top: 260px;
+        }
+
+
+
+    </style>
+
+</head>
+
+<body>
+<div class="space">
+    <div class="planet-area">
+        <img src="img/mars.png" alt ="planet" class="planet">
+        <img src="img/rocket.png" alt ="rocket" class="rocket">
+    </div>
+    <div class="control-panel">
+        <div class="control-panel__inner">
+            <input type="password" id="textBoxPassword" class="password password-textBox" placeholder="Enter password to unlock">
+            <input type="button" id="buttonPasswordOk" class="password" value="ok">
+            <div class="check-buttons">
+                <input type="checkbox" class="checkBox" id="checkBoxConsole1" name="checkbox" value="true" onchange="check()" disabled>
+                <input type="checkbox" class="checkBox" id="checkBoxConsole2" name="checkbox" value="true" onchange="check()" disabled>
+                <input type="checkbox" class="checkBox" id="checkBoxConsole3" name="checkbox" value="true" onchange="check()" disabled>
+                <input type="checkbox" class="checkBox" id="checkBoxConsole4" name="checkbox" value="true" onchange="check()" disabled>
+                <input type="checkbox" class="checkBox" id="checkBoxConsole5" name="checkbox" value="true" onchange="check()" disabled>
+                <input type="checkbox" class="checkBox" id="checkBoxConsole6" name="checkbox" value="true" onchange="check()" disabled>
+            </div>
+
+            <div class="levers">
+                <input type="range" id="leverConsole1" class="lever" min="-5" max="5" onchange="check()" disabled>
+                <input type="range" id="leverConsole2" class="lever" min="-5" max="5" onchange="check()" disabled>
+                <input type="range" id="leverConsole3" class="lever" min="-5" max="5" onchange="check()" disabled>
+                <input type="range" id="leverConsole4" class="lever" min="-5" max="5" onchange="check()" disabled>
+                <input type="range" id="leverConsole5" class="lever" min="-5" max="5" onchange="check()" disabled>
+            </div>
+            <input type="button" id="buttonLaunch" class="launch" value="launch" onclick="fly()" disabled>
+        </div>
+    </div>
+</div>
+<script>
+    let textBoxPassword = document.getElementById("textBoxPassword");
+    let buttonPasswordOk = document.getElementById("buttonPasswordOk");
+    let buttonLaunch = document.getElementById("buttonLaunch");
+    let retVal = 0;
+
+    buttonPasswordOk.addEventListener("click", ()=> {
+        if(textBoxPassword.value == "TrustNo1") {
+            document.getElementById("checkBoxConsole1").removeAttribute("disabled");
+            document.getElementById("checkBoxConsole2").removeAttribute("disabled");
+            document.getElementById("checkBoxConsole3").removeAttribute("disabled");
+            document.getElementById("checkBoxConsole4").removeAttribute("disabled");
+            document.getElementById("checkBoxConsole5").removeAttribute("disabled");
+            document.getElementById("checkBoxConsole6").removeAttribute("disabled");
+
+            document.getElementById("leverConsole1").removeAttribute("disabled");
+            document.getElementById("leverConsole2").removeAttribute("disabled");
+            document.getElementById("leverConsole3").removeAttribute("disabled");
+            document.getElementById("leverConsole4").removeAttribute("disabled");
+            document.getElementById("leverConsole5").removeAttribute("disabled");
+         }
+    })
+
+    /*buttonLaunch.addEventListener("click", fly());*/
+
+    function check (retVal = 0) {
+        let checkBoxList = document.querySelectorAll("input.checkBox");
+        checkBoxList.forEach((checkBox) => {
+            if (checkBox.checked == true) {
+                retVal++;
+            }
+        })
+
+        let leverList = document.querySelectorAll("input.lever");
+        leverList.forEach((lever) => {
+            if (lever.value == "5") {
+                retVal++;
+            }
+        })
+
+        if(retVal == 11) {
+            buttonLaunch.removeAttribute("disabled");
+        } else {
+            buttonLaunch.setAttribute("disabled", "");
+        }
+    }
+
+    function fly() {
+        let rocket = document.querySelector(".rocket");
+
+        rocket.style.animationName = "rocketFly";
+        rocket.style.animationDuration = "5s";
+        rocket.style.animationTimingFunction = "linear";
+        rocket.style.animationDelay = "2s";
+        rocket.style.animationFillMode = "forwards";
+    }
+
+
+</script>
+
+</body>
+</html>
